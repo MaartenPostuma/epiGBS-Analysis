@@ -18,10 +18,11 @@ Design<-read.table("results/filtering/Design_filtered.tsv")
 
 i<-0
 percMethData<-pcaPlot<-list()
+
 #Reads the united data for each different context
 for (context in c("CG","CHG","CHH")){
   i<-i+1
-  united<-readMethylDB(list.files(paste0("/scratch2/maarten/scabiosa/Filt",context),
+  united<-readMethylDB(list.files(paste0("Filt",context),
                                   pattern = paste0("methylBase_",context,".txt.bgz$")
                                   ,full.names=T)
                        )
