@@ -27,7 +27,7 @@ sample_2 rain       cold
 ```
 
 # How to run
-The scripts perform general analysis on the epiGBS pipeline, however input data, filtering contstraints and variables to colour plots / populate models are not general and need to be adjusted when running the model. 
+The scripts perform general analysis on the epiGBS pipeline, however input data, filtering contstraints and variables to colour plots / populate models are not general and need to be adjusted when running the scripts. 
 
 The scripts in the pipeline need to be ran in the following order:
 * src/readMethylKit.R
