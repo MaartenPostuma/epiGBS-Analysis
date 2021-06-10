@@ -13,7 +13,7 @@ colorBlindBlack8  <- c("#000000", "#E69F00", "#56B4E9", "#009E73",
 
 #Loads the filtered design
 
-Design<-read.table("results/filtering/Design_filtered.tsv")
+Design<-read.table("results/Design_filtered.tsv")
 
 
 i<-0

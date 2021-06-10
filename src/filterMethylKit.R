@@ -10,7 +10,7 @@ library(ggpubr)
 
 
 ##############################################
-nLociData<-read.table("results/filtering/nLociPerInd.tsv") #Load nLoci per sample generated previously
+nLociData<-read.table("results/nLociPerInd.tsv") #Load nLoci per sample generated previously
 Design<-read.table("data/Design.tsv") #Load design file
 
 #############################################
@@ -32,7 +32,7 @@ ggplot(nLociData,aes(x=nloci))+geom_histogram(binwidth = 5000,fill="white",col="
   ggtitle(paste("n Individuals filtered =",
                 length(nLociData$nloci[nLociData$nloci<filterCutOff]),"out of",
                 length(nLociData[,1])))+
-  ggsave("results/filtering/nLociDistrib.png")
+  ggsave("results/nLociDistrib.png")
 #################################
 
 
@@ -54,7 +54,7 @@ merged<-merge(nLociDataFiltFinal,Design,by.x="indName",by.y="sampleID") #Filters
 aggregate(nloci~site+treatment.y,
           merged,length) #Creates a table with the number of individuals                                                        passing filters per experimental treatment,                                                           need to change the treatment into the column                                                          names in your design file
 
-write.table(merged,"results/filtering/Design_filtered.tsv") #writes the filtered Design
+write.table(merged,"results/Design_filtered.tsv") #writes the filtered Design
 
 #################
 #Create the methylKit databases for each different context
