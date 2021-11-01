@@ -73,6 +73,6 @@ glmm_in<-split(methylationData,f = as.factor(CHR_POS)) #Split the large data.fra
 glmm_out <- mclapply(glmm_in, function_glmm,nullModel,fullModel, mc.cores=15) 
 data_glmm<-do.call("rbind",glmm_out)
 data_glmm$qval <- p.adjust(data_glmm$pval_lrt, method="fdr", n = nrow(data_glmm))
-write.table(data_glmm,paste0("output/glmer",context,"tsv"))
+write.table(data_glmm,paste0("output/glmer",context,".tsv"))
 }
 
