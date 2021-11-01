@@ -2,7 +2,7 @@ rm(list=ls())
 library(methylKit)
 library(reshape2)
 
-
+#Adjusted from seepers et al. (2021?)
 Design<-read.table("results/Design_filtered.tsv") #Read design table to eventually combine with methylation data
 
 for(context in c("CG","CHH","CHG")){ #Make the data for all 3 contexts

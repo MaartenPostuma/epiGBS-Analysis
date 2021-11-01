@@ -1,6 +1,7 @@
 rm(list=ls())
 library(lme4);library(lmerTest);library(optimx);library(base);
 library(parallel);library(stringr);library(reshape2)
+#Adjusted from seepers et al. (2021?)
 
 
 #The models contain numCs,numTs in stead of flat percentages to account in variation in coverage
