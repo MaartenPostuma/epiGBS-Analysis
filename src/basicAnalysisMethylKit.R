@@ -19,6 +19,8 @@ Design<-read.table("results/Design_filtered.tsv")
 i<-0
 percMethData<-pcaPlot<-list()
 
+
+
 #Reads the united data for each different context
 for (context in c("CG","CHG","CHH")){
   i<-i+1

@@ -5,8 +5,8 @@ library(parallel);library(stringr);library(reshape2)
 
 
 #The models contain numCs,numTs in stead of flat percentages to account in variation in coverage
-nullModel<-as.formula("cbind(numCs, numTs)~1 + (1|indNumber)") #Write your null model
-fullModel<-as.formula("cbind(numCs, numTs)~1 + site + (1|indNumber)") #Write your full model
+nullModel<-as.formula("cbind(numCs, numTs)~1 + site +treatment+ (1|RE)") #Write your null model
+fullModel<-as.formula("cbind(numCs, numTs)~1 + site + (1|RE)") #Write your full model
 
 
 for(context in c("CG","CHG","CHH")){
@@ -70,9 +70,9 @@ methylationData<-read.table(paste0("Filt",context,"/longFormat",context,".tsv"))
 CHR_POS<-paste(methylationData$chr,methylationData$end)#Creates a vector with all of the loci name
 glmm_in<-split(methylationData,f = as.factor(CHR_POS)) #Split the large data.frame in to a list based on loci
 
-glmm_out <- mclapply(glmm_in, function_glmm,nullModel,fullModel, mc.cores=15) 
+glmm_out <- mclapply(glmm_in, function_glmm,nullModel,fullModel, mc.cores=2) 
 data_glmm<-do.call("rbind",glmm_out)
 data_glmm$qval <- p.adjust(data_glmm$pval_lrt, method="fdr", n = nrow(data_glmm))
-write.table(data_glmm,paste0("output/glmer",context,".tsv"))
+write.table(data_glmm,paste0("output/glmerTreatmentInt",context,".tsv"))
 }
 
