@@ -102,5 +102,5 @@ unitedCHH<-unite(filteredCHH,min.per.group=as.integer(length(nLociDataFiltFinal$
 
 
 saveRDS(unitedCG, file = "results/united.filtered.CG.RData")
-saveRDS(unitedCHG, file = "resultsunited.filtered.CHG.RData")
+saveRDS(unitedCHG, file = "results/united.filtered.CHG.RData")
 saveRDS(unitedCHH, file = "results/united.filtered.CHH.RData")

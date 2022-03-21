@@ -12,16 +12,19 @@ colorBlindBlack8  <- c("#000000", "#E69F00", "#56B4E9", "#009E73",
 
 Design<-read.table("results/Design_filtered.tsv") #Read design table
 
+unitedCG<-readRDS("results/united.filtered.CG.RData")
+unitedCHG<-readRDS("results/united.filtered.CHG.RData")
+unitedCHH<-readRDS("results/united.filtered.CHH.RData")
+
+
+
 
 ################
 #Load filtered methylKit data to import into DSS (Using the same filters)
 positions<-data.frame() 
 for (context in c("CG","CHG","CHH")){
   i<-i+1
-  united<-readMethylDB(list.files(paste0("Filt",context),
-                                  pattern = paste0("methylBase_",context,".txt.bgz$")
-                                  ,full.names=T)
-  )
+  united<-readMethylDB(get(paste0("united",context)))
   positions<-rbind(positions,data.frame(getData(united),context=context))
 }
 
@@ -59,7 +62,7 @@ myDSS<-combineList(sampleList) #Combine them into a BSseq dataset
 
 #Fit the model you want to fit!
 
-myFit <- DMLfit.multiFactor(myDSS, Design,~site+treatment.y)
+myFit <- DMLfit.multiFactor(myDSS, Design,~site+treatment)
 test<-DMLtest.multiFactor(myFit,term="site")
 test$loci<-paste(test$chr,test$pos,sep="_")
 
