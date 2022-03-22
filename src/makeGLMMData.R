@@ -4,14 +4,11 @@ library(reshape2)
 
 #Adjusted from seepers et al. (2021?)
 Design<-read.table("results/Design_filtered.tsv") #Read design table to eventually combine with methylation data
-unitedCG<-readRDS("results/united.filtered.CG.RData")
-unitedCHG<-readRDS("results/united.filtered.CHG.RData")
-unitedCHH<-readRDS("results/united.filtered.CHH.RData")
 
-for(context in c("CG","CHH","CHG")){ #Make the data for all 3 contexts
-united<-get(paste0("united",context)) #Read the methylBase objects made when filtering
+for(context in c("CG")){ #Make the data for all 3 contexts
+united<-readRDS(paste0("results/united.filtered.",context,".RData")) #Read the methylBase objects made when filtering
 
-methylation<-getData(united) #Load data
+methylation<-methylKit::getData(united) #Load data
 
 
 columnsC<- grep(pattern="^numCs", colnames(methylation)) #Get num C's
@@ -42,7 +39,6 @@ IDFrame<-data.frame(sampleID=united@sample.ids,ID=paste0("ID_",1:length(united@s
 DesignWithIDs<-merge(IDFrame,Design,by="sampleID") #Merge real IDs with IDs created above
 
 methPatternLongCorrectID<-merge(methPatternLong,DesignWithIDs,by="ID") #Combine Design with methylation data
-
-write.table(methPatternLongCorrectID,paste0("Filt",context,"/longFormat",context,".tsv")) #Write the methylation data
+saveRDS(methPatternLongCorrectID,paste0("results/long",context,".RData"))
 }
 

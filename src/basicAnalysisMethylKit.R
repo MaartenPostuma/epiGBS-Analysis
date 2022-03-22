@@ -24,8 +24,8 @@ percMethData<-pcaPlot<-list()
 #Reads the united data for each different context
 for (context in c("CG","CHG","CHH")){
   i<-i+1
-  ##########################################  
-  #PCA's for each context
+  # #########################################
+  # # PCA's for each context
   # pca<-PCASamples(get(paste0("united",context)),scale =T,obj.return = T,screeplot = T) #create the PCA
   # 
   # pcaPerc<-round(pca$sdev/sum(pca$sdev)*100,1) #Calculate percentage of variante per PC
@@ -36,8 +36,8 @@ for (context in c("CG","CHG","CHH")){
   #   scale_colour_manual(values = colorBlindBlack8)+ggtitle(context)+
   #   xlab(paste0("PC1 (",pcaPerc[1],"%)"))+
   #   ylab(paste0("PC2 (",pcaPerc[2],"%)"))
-  ###########################################
-  #Percentage methylation dataframes
+  # ##########################################
+  # Percentage methylation dataframes
   percMethData[[i]]<-as.data.frame(t(percMethylation(get(paste0("united",context)))))
   
   

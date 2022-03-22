@@ -2,11 +2,13 @@ rm(list=ls())
 library(lme4);library(lmerTest);library(optimx);library(base);
 library(parallel);library(stringr);library(reshape2)
 #Adjusted from seepers et al. (2021?)
+colorBlindBlack8  <- c("#000000", "#E69F00", "#56B4E9", "#009E73", 
+                       "#F0E442", "#0072B2", "#D55E00", "#CC79A7") #Make pretty colours
 
 
 #The models contain numCs,numTs in stead of flat percentages to account in variation in coverage
-nullModel<-as.formula("cbind(numCs, numTs)~1 + site +treatment+ (1|RE)") #Write your null model
-fullModel<-as.formula("cbind(numCs, numTs)~1 + site + (1|RE)") #Write your full model
+nullModel<-as.formula("cbind(numCs, numTs)~1 + site + treatment + (1|Run)") #Write your full model
+fullModel<-as.formula("cbind(numCs, numTs)~1 + site + treatment + site:treatment + (1|Run)") #Write your null model
 
 
 for(context in c("CG","CHG","CHH")){
@@ -66,13 +68,13 @@ function_glmm <- function(methIn,nullModel,fullModel) {tryCatch({
 
 
 
-methylationData<-read.table(paste0("Filt",context,"/longFormat",context,".tsv")) #Loads the data created using makeGLMMData.R
+methylationData<-readRDS(paste0("results/long",context,".RData")) #Loads the data created using makeGLMMData.R
 CHR_POS<-paste(methylationData$chr,methylationData$end)#Creates a vector with all of the loci name
 glmm_in<-split(methylationData,f = as.factor(CHR_POS)) #Split the large data.frame in to a list based on loci
 
 glmm_out <- mclapply(glmm_in, function_glmm,nullModel,fullModel, mc.cores=2) 
 data_glmm<-do.call("rbind",glmm_out)
 data_glmm$qval <- p.adjust(data_glmm$pval_lrt, method="fdr", n = nrow(data_glmm))
-write.table(data_glmm,paste0("output/glmerTreatmentInt",context,".tsv"))
+write.table(data_glmm,paste0("results/glmerTreatmentInteraction",context,".tsv"))
 }
 

@@ -86,19 +86,18 @@ write.table(merged,"results/Design_filtered.tsv") #writes the filtered Design
 #Create the methylKit databases for each different context
 filteredCG<-filterByCoverage(methylationFilesCG, lo.count = 10, 
                                lo.perc = NULL, hi.count = NULL, context = "CpG", hi.perc = 99.9)
-unitedCG<-unite(filteredCG,min.per.group=as.integer(length(nLociDataFiltFinal$loc)*ind_miss),suffix="CG")
+unitedCG<-unite(filteredCG,min.per.group=as.integer(nrow(nLociDataFiltFinal$sampleID)*ind_miss),suffix="CG")
 
 
 
 filteredCHG<-filterByCoverage(methylationFilesCHG, lo.count = 10, 
                                 lo.perc = NULL, hi.count = NULL, context = "CHG", hi.perc = 99.9)
 unitedCHG<-unite(filteredCHG,
-                 min.per.group=as.integer(length(nLociDataFiltFinal$loc)*ind_miss),suffix="CHG")
+                 min.per.group=as.integer(nrow(nLociDataFiltFinal)*ind_miss),suffix="CHG")
 
 filteredCHH<-filterByCoverage(methylationFilesCHH, lo.count = 10, 
                                 lo.perc = NULL, hi.count = NULL, context = "CHH", hi.perc = 99.9)
-unitedCHH<-unite(filteredCHH,min.per.group=as.integer(length(nLociDataFiltFinal$loc)*ind_miss),suffix="CHH")
-
+unitedCHH<-unite(filteredCHH,min.per.group=as.integer(nrow(nLociDataFiltFinal)*ind_miss),suffix="CHH")
 
 
 saveRDS(unitedCG, file = "results/united.filtered.CG.RData")
