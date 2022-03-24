@@ -1,5 +1,5 @@
 rm(list=ls())
-
+#Based on this webiste https://www.pathwaycommons.org/guide/primers/statistics/fishers_exact_test/ 
 annotatedDMRs<-read.table("results/DMRs.tsv")
 annot<-read.table("results/coveredAnnotation.tsv",h=T)
 

@@ -22,6 +22,7 @@ unitedCHH<-readRDS("results/united.filtered.CHH.RData")
 ################
 #Load filtered methylKit data to import into DSS (Using the same filters)
 positions<-data.frame() 
+i<-1
 for (context in c("CG","CHG","CHH")){
   i<-i+1
   united<-readMethylDB(get(paste0("united",context)))
