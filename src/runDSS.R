@@ -25,7 +25,7 @@ positions<-data.frame()
 i<-1
 for (context in c("CG","CHG","CHH")){
   i<-i+1
-  united<-readMethylDB(get(paste0("united",context)))
+  united<-get(paste0("united",context))
   positions<-rbind(positions,data.frame(getData(united),context=context))
 }
 
