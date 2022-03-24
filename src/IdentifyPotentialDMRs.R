@@ -12,9 +12,9 @@ for(i in 1:nrow(data)){
     posRegionChr<-data$chr[i]
     posRegionPos<-data$pos[i]
   }  
-  counts<-sum(dataDMCTreatment$chr==dataDMCTreatment$chr[i]&
-                dataDMCTreatment$pos>dataDMCTreatment$pos[i]&
-                dataDMCTreatment$pos<(dataDMCTreatment$pos[i]+windowSize))
+  counts<-sum(data$chr==data$chr[i]&
+                data$pos>data$pos[i]&
+                data$pos<(data$pos[i]+windowSize))
   if(counts==0){
     dataOut<-rbind(dataOut,data.frame(posChr=posRegionChr,posPos=posRegionPos,endChr=data$chr[i],endPos=data$pos[i],count=total+1))
     total<-0}else{
