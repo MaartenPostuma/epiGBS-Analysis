@@ -1,0 +1,47 @@
+#bash code for getting databases and rough annotation of epiGBS denovo fragments
+
+#CHECK ALL PATHS IN CAPITALS AND CHANGE THEM TO THE CORRECT VALUE FOR YOUR ANALYSIS!
+
+
+####Downloading programs and databases ###################
+
+mamba env create -f epiGBSAnnotation.yaml -n epiGBSAnnotation 
+conda activate epiGBSAnnotation 
+
+#Install the full dfam database
+wget https://www.dfam.org/releases/Dfam_3.2/families/Dfam.h5.gz #Download the big data base skip if you already have it
+gunzip Dfam.h5.gz
+
+whereis RepeatMasker #Check where Repeatmasker is
+mv Dfam.h5 /WHERECONDAIS/env/epiGBSanalysis/share/RepeatMasker/Libraries/ #Add the first part of the path here (Hopefully you do not need sudo rights to adjust things in your conda evv)
+  
+
+#Install the diamond protein database
+#Get the blast database! Unless you already have it then do not do this. As it is massive and will take ages
+wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz -O //YOURTMPDIR/nr.gz 
+diamond makedb -p 8 --in /YOURTMPDIR/nr.gz -d /YOURTMPDIR/nrdb.dmnd
+
+################################# Run programs ######################
+
+#Repeatmasker ###################
+
+RepeatMasker -pa 8 -species Embryophyta -xsmall EPIGBSOUTPUTLOCATION/output_denovo/consensus_cluster.renamed.fa
+
+python3 src/annotation/extractAnnotationFromRepeatMaskerOutput.py output/output_denovo/consensus_cluster.renamed.fa.out | pigz -p 4 > RESULTS/consensuscluster.renamed.repeats.gz
+
+#Diamond ###################
+# search for matches to the proteins
+diamond blastx -d /scratch/tmp//nrdb.dmnd -q EPIGBSOUTPUTLOCATION/output_denovo/consensus_cluster.renamed.fa -p 8 -f 5 -o RESULTS/diamond.xml.gz --tmpdir /YOURTMPDIR/ --compress 1 -e 0.00001 -k 10
+
+# replace some weird characters
+zcat RESULTS/diamond.xml.gz | sed "s/ &gt;/|/g" | sed "s/ & / and /g" | sed "s/&//g" | pigz -p 4 > RESULTS/diamond_reformed.xml.gz
+# parse blast and get the best hits
+python2 src/annotation/parseBlastXMLbestHit.py RESULTS/diamond_reformed.xml.gz
+
+
+#Combine the repeat results and the gene identification results ###############3
+
+Rscript src/annotation/mergeAnnotation.R EPIGBSOUTPUTLOCATION/output_denovo/consensus_cluster.renamed.fa RESULTS/diamond_reformed.xml.genes RESULTS/consensuscluster.renamed.repeats.gz RESULTS/mergedAnnot.csv
+
+
+
