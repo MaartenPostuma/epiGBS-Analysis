@@ -10,7 +10,14 @@ colorBlindBlack8  <- c("#000000", "#E69F00", "#56B4E9", "#009E73",
                        "#F0E442", "#0072B2", "#D55E00", "#CC79A7") #Make pretty colours
 #################
 
+
 Design<-read.table("results/Design_filtered.tsv") #Read design table
+locs<-list.files("output/methylation_calling/",full.names = T)[grep("CX_report.txt$",list.files("output/methylation_calling/",full.names = T))] #Get the filename of the epiGBS output
+
+locsData<-data.frame(locs=locs,sampleID=sub("_trimmed.*$","",sub("^.*methylation_calling//","",locs))) #make file with location + sampleID
+Design<-merge(Design,locsData,by="sampleID") #Combine with the filtered design
+
+
 
 unitedCG<-readRDS("results/united.filtered.CG.RData")
 unitedCHG<-readRDS("results/united.filtered.CHG.RData")
@@ -42,7 +49,7 @@ contexts<-data.frame(chr=positions$chr,start=positions$start,context=positions$c
 sampleList<-list()#Make a list which will contain all samples
 i<-1
 for(sample in Design$loc){ #Load all bismark data
-  sampleID<-Design$indName[Design$loc==sample]#Get the sample ID from the design file
+  sampleID<-Design$sampleID[Design$loc==sample]#Get the sample ID from the design file
   covColumn<-grep(paste0("coverage",methylKitOrder$num[methylKitOrder$sample==sampleID],"$"),
                   colnames(positions)) #get the coverage column from methylKit
   
