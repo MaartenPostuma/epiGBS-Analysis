@@ -84,19 +84,26 @@ write.table(merged,"results/Design_filtered.tsv") #writes the filtered Design
 
 #################
 #Create the methylKit databases for each different context
-filteredCG<-filterByCoverage(methylationFilesCG, lo.count = 10, 
-                               lo.perc = NULL, hi.count = NULL, context = "CpG", hi.perc = 99.9)
-unitedCG<-unite(filteredCG,min.per.group=as.integer(nrow(nLociDataFiltFinal$sampleID)*ind_miss),suffix="CG")
+
+finalMethylationFilesCG<-reorganize(methylationFilesCG, sample.ids=nLociDataFiltFinal$sampleID, 
+                                    treatment = c(1:nrow(nLociDataFiltFinal))) #Keep individuals that pass filtering
+filteredCG<-filterByCoverage(finalMethylationFilesCG, lo.count = 10,  #Filter sites for coverage
+                             lo.perc = NULL, hi.count = NULL, context = "CpG", hi.perc = 99.9)
+unitedCG<-unite(filteredCG,min.per.group=as.integer(nrow(nLociDataFiltFinal)*ind_miss),suffix="CG")#Unite
+
+
+finalMethylationFilesCHG<-reorganize(methylationFilesCHG, sample.ids=nLociDataFiltFinal$sampleID, 
+                                     treatment = c(1:nrow(nLociDataFiltFinal)))
+filteredCHG<-filterByCoverage(finalMethylationFilesCHG, lo.count = 10, 
+                              lo.perc = NULL, hi.count = NULL, context = "CpG", hi.perc = 99.9)
+unitedCHG<-unite(filteredCHG,min.per.group=as.integer(nrow(nLociDataFiltFinal)*ind_miss),suffix="CHG")
 
 
 
-filteredCHG<-filterByCoverage(methylationFilesCHG, lo.count = 10, 
-                                lo.perc = NULL, hi.count = NULL, context = "CHG", hi.perc = 99.9)
-unitedCHG<-unite(filteredCHG,
-                 min.per.group=as.integer(nrow(nLociDataFiltFinal)*ind_miss),suffix="CHG")
-
-filteredCHH<-filterByCoverage(methylationFilesCHH, lo.count = 10, 
-                                lo.perc = NULL, hi.count = NULL, context = "CHH", hi.perc = 99.9)
+finalMethylationFilesCHH<-reorganize(methylationFilesCHH, sample.ids=nLociDataFiltFinal$sampleID, 
+                                     treatment = c(1:nrow(nLociDataFiltFinal)))
+filteredCHH<-filterByCoverage(finalMethylationFilesCHH, lo.count = 10, 
+                              lo.perc = NULL, hi.count = NULL, context = "CpG", hi.perc = 99.9)
 unitedCHH<-unite(filteredCHH,min.per.group=as.integer(nrow(nLociDataFiltFinal)*ind_miss),suffix="CHH")
 
 
