@@ -3,10 +3,10 @@
 """extractAnnotationFromRepeatMaskerOutput.py
 DESCRIPTION MISSING
 """
-
+​
 __author__ = "Marc W Schmid"
 __version__ = "0"
-
+​
 import argparse
 import sys
 import logging
@@ -15,14 +15,14 @@ import operator
 import gzip
 import re
 logging.basicConfig(format="=== %(levelname)s === %(asctime)s === %(message)s", level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
-
+​
 def myopen(fileName, mode="r"):
     """open either a regular or a compressed file"""
     if fileName.endswith(".gz"):
         return gzip.open(fileName, mode=mode)
     else:
         return open(fileName, mode=mode)
-
+​
 def extractAnnotationFromRepeatMaskerOutput(inputFileName):
     outstring = '\t'.join(["queryID", "queryStart", "queryEnd", "queryLeft", "repeatClassOrFamily", "swScore"]) + '\n'
     sys.stdout.write(outstring)
@@ -37,9 +37,9 @@ def extractAnnotationFromRepeatMaskerOutput(inputFileName):
             outstring = '\t'.join([queryID, queryStart, queryEnd, queryLeft, repeatClassOrFamily, swScore]) + '\n'
             sys.stdout.write(outstring)
     pass
-
+​
 if __name__ == '__main__':
-
+​
     parser = argparse.ArgumentParser(
         prog="extractAnnotationFromRepeatMaskerOutput.py",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -50,7 +50,7 @@ if __name__ == '__main__':
                         
             The resulting table is printed to std::out.
             """))
-
+​
     parser.add_argument("-v", "--version", action="version",
                         version='%(prog)s {0}'.format(__version__))
     
@@ -58,7 +58,7 @@ if __name__ == '__main__':
                         help="""
                         A '*.out' file from repeatMasker.
                         """)
-
+​
     args = parser.parse_args()
     
     extractAnnotationFromRepeatMaskerOutput(args.repeatMaskerOutput)
